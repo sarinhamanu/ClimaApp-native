@@ -1,22 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image,StyleSheet,Text,View } from "react-native";
 
 function App(): React.JSX.Element {
+
+const[city, setCity] = useState<string>("São Paulo");
+const[humidity, setHumidity] = useState<string>("15");
+const[condition, setCondition] = useState<string>("Ensolarado");
+const[rainProbability, setRainProbability] = useState<string>("30");
+const[feelsLike,setFeelsLike] = useState<string>("41");
+const[temperature, setTemperature] = useState<string>("37");
+const[night, setNight] = useState<boolean>(false);
+
+
+function isNight(){
+  const hour = new Date().getHours();
+  console.log(hour);
+
+
+  if(hour>= 18 ||hour< 6){
+    setNight(true);{}
+  }else{
+    setNight(false);
+  }
+}
+
+useEffect(()=>{
+  const intervalId = setInterval(()=>{
+    isNight();
+  }, 6000);
+ 
+})
+
   return(
-   <View style={styles.container}>
+   <View style={[styles.container, night == false ? styles.containerBgDay]}>
      <View  style={styles.header}>
-      <Text style={styles.city}>Presidente Epitacio</Text>
+      <Text style={styles.city}>{city}</Text>
      </View>
      <View style={styles.detailsContainer}>
-       <Text style={styles.temperature}>55 °c</Text>
+       <Text style={styles.temperature}>{temperature} °c</Text>
        <Image source={require('./src/assets/images/icon3.png')} style={styles.weatherIcon}/>
      </View>
 
 <View>
-   <Text style={styles.weatherCondition}>Nublado</Text>
-   <Text style={styles.text}>Sensação térmica: 179 °c</Text>
-   <Text style={styles.text}>Probabilidade de Chuva:78$</Text>
-   <Text style={styles.text}>Umidade: 99%</Text>
+   <Text style={styles.weatherCondition}>{condition}</Text>
+   <Text style={styles.text}>Sensação Térmica:{feelsLike}°c</Text>
+   <Text style={styles.text}>Probabilidade de Chuva:{rainProbability}%</Text>
+   <Text style={styles.text}>Umidade: {humidity}%</Text>
 </View>
 <Image source={require('./src/assets/images/cidade.png')} style={styles.bottomImage}/>
    </View>
@@ -74,7 +103,13 @@ backgroundColor: '#09d3f3'
     color:'#fff',
     marginBottom: 10,
     fontStyle: 'italic',
-  }
+  },
+  containerBgDay:{
+ backgroundColor: '#09d3f3'
+  },
+  containerBgNight:{
+ backgroundColor: '#333'
+  },
 
 });
 
